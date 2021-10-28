@@ -1,5 +1,5 @@
 <p align="center">
-![image](https://user-images.githubusercontent.com/82709682/139194239-a18772ed-fd7e-4eda-b9fe-1afb1e02fe2b.png)
+<img media="./media/imagenes/Baby-Bechoso.png" width="140" height="140"/>
 </p>
 
 ### PROCESO DE INSTALACION
