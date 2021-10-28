@@ -3,9 +3,12 @@
 </p>
 <p align="center">
 𝕭𝖆𝖇𝖞𝕭𝖊𝖈𝖍𝖔𝖘𝖔
+  
 𝕭𝖞;
 𝕿𝖍𝖊𝕮𝖍𝖔𝖚𝖙𝖊
 </p>
+
+
 ### PROCESO DE INSTALACION
 ```bash
 - pkg upgrade && update
