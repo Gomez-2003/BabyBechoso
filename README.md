@@ -6,6 +6,7 @@
 </p>
 </p>
 REDES SOCIALES
+</p>
 ```bash
 <a href="https://www.youtube.com/channel/UC-HPutaDGeTPjrCId0bXQgg"><img src="/media/redes/youtube.png" width="40" height="40"</a>
 <a href="wa.me/18299897014"><img src="/media/redes/whatsapp.png" width="40" height="40"</a>
