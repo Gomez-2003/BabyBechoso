@@ -5,7 +5,7 @@
 𝗖𝗥𝗘𝗔𝗗𝗢𝗥
  </p>
 <p align="center">
-<a href="#"><img src="/media/redes/youtube.png"</a>
+<a href="#"><img src="/media/redes/youtube.png" width="10" height="10"</a>
 </p>
 𝕿𝖍𝖊𝕮𝖍𝖔𝖚𝖙𝖊
 </p>
