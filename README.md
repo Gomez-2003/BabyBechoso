@@ -20,7 +20,7 @@ Clona este repositorio
  ```bash
 > git clone https://github.com/thechoute/BabyBechoso
 ```
-
+Inicia la instalacion
 - cd BabyBechoso
 - bash install.sh
 PARA INICIAR EL BOT
