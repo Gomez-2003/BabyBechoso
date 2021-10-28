@@ -9,6 +9,7 @@
 
 
 ### PROCESO DE INSTALACION
+
 ```bash
 - pkg upgrade && update
 - pkg install nodejs
@@ -22,6 +23,8 @@ Clona este repositorio
 
 - cd BabyBechoso
 - bash install.sh
+PARA INICIAR EL BOT
+ ```bash
 - npm start
 ```
 
