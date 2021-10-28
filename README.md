@@ -15,11 +15,13 @@
 - pkg install git
 - pkg install bash
 ```
+<br />
 Clona este repositorio</h3><img src="https://raw.githubusercontent.com/othneildrew/Best-README-Template/master/images/logo.png" alt="Logo" width="20" height="20">
   </a>
  ```bash
 > git clone https://github.com/thechoute/BabyBechoso
 ```
+
 - cd BabyBechoso
 - bash install.sh
 - npm start
