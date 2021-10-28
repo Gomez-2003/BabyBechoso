@@ -31,10 +31,12 @@ const moment = require("moment-timezone");
 const _registered = JSON.parse(fs.readFileSync('./src/registered.json'))
 const welkom = JSON.parse(fs.readFileSync('./src/welkom.json'))
 const antilink = JSON.parse(fs.readFileSync('./src/antilink.json'))
+const ban = JSON.parse(fs.readFileSync('./src/banned.json'))
 const conn = require("./lib/connect")
 const wa = require("./lib/wa")
 const { color } = require("./lib/color");
 const {  getBuffer, h2k,  generateMessageID, getGroupAdmins,  getRandom, banner,  start,  info, success, close,} = require("./lib/functions");
+const { addBanned, unBanned, BannedExpired, cekBannedUser } = require('./lib/banned.js')
 const { isFiltered, addFilter } = require('./lib/Addfilter')
 const config = JSON.parse(fs.readFileSync("./config.json"))
 const owner = config.owner
@@ -43,7 +45,14 @@ const fake = 'Leon'
 var public = config.public
 
 //Redes Sociales
-const gpwha = '_Luego Pongo El Link Del Grupo_' 
+const { gpwha, ytchoute, gitchoute, instachoute, whachoute,} = require ('./lib/redes')
+const { reglas } = require ('./lib/reglas')
+
+// - - 𝑬𝑿𝑷𝑶𝑹𝑻𝑨𝑪𝑰𝑶𝑵𝑬𝑺
+//const { menu } = require ('./lib/menus/menu')
+const { cgrupos } = require ('./lib/menus/cg')
+const { infobot } = require ('./lib/exportaciones/infobot')
+const { vor } = require ('./lib/exportaciones/vor')
 
 //Connet
 conn.connect()
@@ -101,7 +110,7 @@ youtube.com/channel/UC-HPutaDGeTPjrCId0bXQgg`
 ┌──────────────
 ├ *Nombre* : @${num.split('@')[0]}
 ├ *Número* : ${num.replace('@s.whatsapp.net', '')}
-├ *Mensaje* : Admin nuevo
+├ *Mensaje* : Admin nuevo.
 └──────────────`
                 let buff = await getBuffer(ppimg)
                 leo.sendMessage(mdata.id, buff, MessageType.image, {caption: teks, contextInfo: {"mentionedJid": [num]}})
@@ -136,7 +145,13 @@ youtube.com/channel/UC-HPutaDGeTPjrCId0bXQgg`
             console.log('Error : %s', color(e, 'red'))
         }
     })
-    
+// Funcion de eliminar   
+    const kick = function (from, orangnya) {
+        for (let i of orangnya) {
+          leo.groupRemove(from, [i]);
+        }
+      }
+
 
 leo.on('chat-update', async (choute) => {
     try {	  
@@ -176,44 +191,60 @@ leo.on('chat-update', async (choute) => {
 
 
 const command = comm
-
   const crypto = require('crypto')
   const arg = chats.slice(command.length + 2, chats.length)
   const args = budy.trim().split(/ +/).slice(1)
   const isCmd = budy.startsWith(prefix)
-  const meNumber = leo.user.jidi
+  const q = args.join(' ')
+  const soyYo = leo.user.jid
+  const botNumber = leo.user.jid.split("@")[0]
+  const ownerNumber = ['18299897014@s.whatsapp.net']
   const isGroup = from.endsWith('@g.us')
   const sender = choute.key.fromMe ? leo.user.jid : isGroup ? choute.participant : choute.key.remoteJid
   const senderNumber = sender.split("@")[0]
+            const jid = sender
+  const meNumber = leo.user.jidi
+  const itsMe = ownerNumber == botNumber
+  const conts = choute.key.fromMe ? leo.user.jid : leo.contacts[sender] || { notify: jid.replace(/@.+/, '') }
+  const pushname = choute.key.fromMe ? leo.user.name : conts.notify || conts.vname || conts.name || '-'
   const groupMetadata = isGroup ? await leo.groupMetadata(from) : ''
   const groupName = isGroup ? groupMetadata.subject : ''
   const groupMembers = isGroup ? groupMetadata.participants : ''
   const groupAdmins = isGroup ? await wa.getGroupAdmins(groupMembers) : []
   const isAdmin = groupAdmins.includes(sender) || false
   const botAdmin = groupAdmins.includes(leo.user.jid)
-  const q = args.join(' ')
-  const soyYo = leo.user.jid
-  const botNumber = leo.user.jid.split("@")[0]
-  const itsMe = senderNumber == botNumber
-  const ownerNumber = ['18299897014@s.whatsapp.net']
-  const isAntiLink = isGroup ? antilink.includes(from) : false
-
-  
-  
-  
-  const jid = sender
-  const conts = choute.key.fromMe ? leo.user.jid : leo.contacts[sender] || { notify: jid.replace(/@.+/, '') }
-  const pushname = choute.key.fromMe ? leo.user.name : conts.notify || conts.vname || conts.name || '-'
-  
-  const isWelkom = isGroup ? welkom.includes(from) : false
-  const isRegister = checkRegisteredUser(sender)
   const isOwner = senderNumber == owner || senderNumber == botNumber || mods.includes(senderNumber)
+  const isBan = cekBannedUser(sender, ban)
+  const isRegister = checkRegisteredUser(sender)
+  const isWelkom = isGroup ? welkom.includes(from) : false
+  const isAntiLink = isGroup ? antilink.includes(from) : false
   const mentions = (teks, memberr, id) => {
     (id == null || id == undefined || id == false) ? leo.sendMessage(from, teks.trim(), extendedText, {contextInfo: {"mentionedJid": memberr}}) : leo.sendMessage(from, teks.trim(), extendedText, {quoted: choute, contextInfo: {"mentionedJid": memberr}})
     }
     const usedCommandRecently = new Set()
 
-///Baby
+const isQuotedMsg = type === 'extendedTextMessage' && content.includes('textMessage')
+
+const moment = require('moment-timezone')
+const jm = moment.tz('America/Santo_Domingo').format('HH:mm:ss')
+const menu = `
+╔═══ ⌊ 💎 *𝕭𝖆𝖇𝖞𝕭𝖊𝖈𝖍𝖔𝖘𝖔* 💎 ⌉
+╟ 𝐔𝐬𝐮𝐚𝐫𝐢𝐨: ${pushname}
+╟ 𝐖𝐚.𝐦𝐞: wa.me/${sender.split("@")[0]}
+╟ 𝐇𝐨𝐫𝐚: ${jm}
+╠════ *𝐆𝐫𝐮𝐩𝐨𝐬:* 
+╟${prefix}grupos
+╠════ *𝐃𝐞𝐬𝐜𝐚𝐫𝐠𝐚𝐬:*
+╟ ${prefix}descargas
+╠════ *𝐒𝐭𝐢𝐜𝐤𝐞𝐫:*
+╟${prefix}stickeres
+╠════ *𝐄𝐧𝐭𝐫𝐞𝐭𝐞𝐧𝐢𝐦𝐢𝐞𝐧𝐭𝐨:*
+╟${prefix}juegos
+╠════ *𝐂𝐫𝐞𝐝𝐢𝐭𝐨𝐬*
+╟${prefix}creditos
+╚════ ⌊ 𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊 ⌉ `
+
+    ///Baby
   baby = {
     wait: '⌛ 𝐄𝐍 𝐏𝐑𝐎𝐂𝐄𝐒𝐎 ⌛',
     success: '✔️ 𝙎𝙐𝙎𝙎𝙀𝙎 ✔️',
@@ -236,13 +267,13 @@ const command = comm
   if (!isRegister) return reply(baby.only.usrReg)
   if (!isGroup) return reply(baby.only.group)
   if (!isAdmin) return reply(baby.only.admin)
-  if (!botAdmin) return reply(baby.only.Badmin)  
+  if (!botAdmin) return reply(baby.only.Badmin)
+  if (isBan) return reply (baby.only.benned)  
 
 */
 
 switch (command) {
-//REGISTRO
-case 'reg':
+case 'reg':   
             if (isRegister) return reply('*Tu Ya Estas Registrado, o No Lo Recuerdas?*')
             if (!q.includes('|')) return  reply(`*PORFAVOR ESCRIBE BIEN EL FORMATO DE REGISTRO:* ${prefix}reg *Nombre|Edad* con el *|* que los divide.`)
             const nombre = q.substring(0, q.indexOf('|') - 0)
@@ -254,24 +285,28 @@ case 'reg':
             if (edad > 30) return reply(`Pero-\n*Tienes mas de  30 años, no te puedes registrar, mejor cuida tus nietos :D*`)
             if (edad < 13) return reply(`Eres menor de 13 años, mejor vete a limpiarte el culo, que para ti no hay registro.\n*Si me das algo puedo hacer la vista gorda :D*`)
             try {
-            ppimg = await leo.getProfilePicture(`${sender.split('@')[0]}@s.whatsapp.net`)
-            } 
-            catch {
-            ppimg = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
-            }
-            veri = sender                                                
-            addRegisteredUser(sender, nombre, edad, time )
-            try {
-            exec(`magick './src/reg.jpg' -gravity west -fill '#00FF00' -font './src/font-gue.ttf' -size 1280x710 -pointsize 90 -interline-spacing 7.5 -annotate +460-45 '${nombre}' -pointsize 50 -annotate +460+200  '${ppimg}' -resize %[fx:t?u.w*0.2:u.w]x%[fx:?u.h*0.2:u.h] -gravity center -geometry -430+70 -composite 'regsm.jpg'`)
-            leo.sendMessage(from, fs.readFileSync('./regsm.jpg'), MessageType.image, { quoted: choute, caption: `*「 SU REGISTRO FUE UN EXITO😉 」*\n\n *◦ Nombre : ${nombre}*\n*◦ Numero : wa.me/${sender.split("@")[0]}*\n*◦ Edad : ${edad}*\n*◦ Hora De Registro : ${time}*\n*\n\n *📋Su registro fue todo un exito*\n\n*Para Continuar Usando a NYANBOT Escriba el siguiente comando: ${prefix}menu*`})
-           } catch {
-            reply(`⠀⠀⠀⠀⠀REGISTRO EXITOSO
-            ☐ Nombre: ${nombre}
-            ☐ Edad: ${edad}
-            ☐ Numero: wa.me/${sender.split("@")[0]}
-            ☐ Hora: ${time}`)
-            }
-            addFilter(from)
+                ppimg = await leo.getProfilePicture(`${sender.split('@')[0]}@s.whatsapp.net`)
+                } 
+                catch {
+                ppimg = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
+                }
+                veri = sender                                                
+            addRegisteredUser(sender, pushname, nombre, edad, time )
+                capt = `
+
+┌────「 *REGISTRADO* 」─
+🎓 𝐔𝐒𝐄𝐑: _${pushname}_
+🎓 𝐍𝐎𝐌𝐁𝐑𝐄: _${nombre}_
+🎓 𝐄𝐃𝐀𝐃: _${edad}_
+🎓 𝐍𝐔𝐌𝐄𝐑𝐎: wa.me/${sender.split("@")[0]}
+🎓 𝐇𝐎𝐑𝐀: _${time}_
+└────「 *${leo.user.name}* 」
+                
+Verificación completa usa *${prefix}menu* para ver el Menu`
+                
+                daftarimg = await getBuffer(ppimg)
+                leo.sendMessage(from, daftarimg, image, {quoted: choute, caption: capt})
+                break                        
             break
 
 case 'welcome':
@@ -279,15 +314,16 @@ case 'bv':
 case 'bienvenidas':
 case 'bienvenida':
             if (!isRegister) return reply(baby.only.usrReg)
+            if (isBan) return reply (baby.only.benned)	
             if (!isGroup) return reply(baby.only.group)
             if (!isAdmin) return reply(baby.only.admin)
             if (!botAdmin) return reply(baby.only.Badmin)  
             if (args.length < 1) return reply(`*BIENVENIDAS*\n\n*${prefix + command} on* para activar\n*${prefix + command} off* para desactivar`)
             if ((args[0]) === 'on') {
-            if (isWelkom) return reply('El mensaje de *Bienvenida* ya esta activa')
+            if (isWelkom) return reply('La bienvenida ya esta activa en este grupo')
             welkom.push(from)
             fs.writeFileSync('./src/welkom.json', JSON.stringify(welkom))
-            reply(`La función de bienvenida se activo en el grupo *${groupMetadata.subject}*`)
+            reply(`Bienvenida activada exitosamente para *${groupMetadata.subject}*`)
             } else if ((args[0]) === 'off') {
             if (!isWelkom) return reply('Bienvenida ya esta desactivada')
             welkom.splice(from, 1)
@@ -298,12 +334,11 @@ case 'bienvenida':
             }
             break
 
-
-
 case 'promote':
 case 'promover':
 case 'rol':
             if (!isRegister) return reply(baby.only.usrReg)
+            if (isBan) return reply (baby.only.benned)	
             if (!isGroup) return reply(baby.only.group)
             if (!isAdmin) return reply(baby.only.admin)
             if (!botAdmin) return reply(baby.only.Badmin)  
@@ -326,6 +361,7 @@ case 'rol':
 case 'demote':
 case 'degradar':
             if (!isRegister) return reply(baby.only.usrReg)
+            if (isBan) return reply (baby.only.benned)	
             if (!isGroup) return reply(baby.only.group)
             if (!isAdmin) return reply(baby.only.admin)
             if (!botAdmin) return reply(baby.only.Badmin)  
@@ -348,15 +384,47 @@ case 'hidetag':
 case 'mencion':
     
             if (!isRegister) return reply(baby.only.usrReg)
+            if (isBan) return reply (baby.only.benned)	
             if (!isGroup) return reply(baby.only.group)
             if (!isAdmin) return reply(baby.only.admin)
             await wa.hideTag(from, args.join(" "))
             break
 
+case 'miembros':
+case 'todos':
+            if (!isRegister) return reply(baby.only.usrReg)
+            if (isBan) return reply (baby.only.benned)	
+            if (!isGroup) return reply(baby.only.group)
+            if (!isAdmin) return reply(baby.only.admin)    
+            leo.updatePresence(from, Presence.composing)
+            members_id = []
+            teks = (args.length > 1) ? body.slice(8).trim(): ''
+            teks += ` *𝐓𝐨𝐭𝐚𝐥* : ${groupMembers.length}\n`
+            for (let mem of groupMembers) {
+            teks += `╠ @${mem.jid.split('@')[0]}\n`
+            members_id.push(mem.jid)
+            }
+            mentions('*𝐌𝐈𝐄𝐌𝐁𝐑𝐎𝐒  𝐃𝐄𝐋  𝐆𝐑𝐔𝐏𝐎*\n╔════ 𝕭𝖆𝖇𝖞𝕭𝖊𝖈𝖍𝖔𝖘𝖔\n╠ ● '+teks+'╠═══════ *𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊* ════════\n╚══════', members_id, true)
+            addFilter(from)
+            break
+
+case 'kick':
+            if (!isRegister) return reply(baby.only.usrReg)
+            if (isBan) return reply (baby.only.benned)	
+            if (!isGroup) return reply(baby.only.group)
+            if (!botAdmin) return reply(baby.only.Badmin)
+            if(!q)return reply(`Pero animal mencioname a quien debo eliminar.\n\n Ejemplo : ${prefix + command} @tag`)
+            y = q.split('@')[1] + '@s.whatsapp.net'
+            leo.groupRemove(from, [y])
+            reply(`Al toque elimino a la rata de mierda`)
+            break 
+            
+
 case 'agregar':
 case 'añadir':
 case 'add':
             if (!isRegister) return reply(baby.only.usrReg)
+            if (isBan) return reply (baby.only.benned)	
             if (!isGroup) return reply(baby.only.group)
             if (!botAdmin) return reply(baby.only.Badmin)
             if (args.length < 1) return reply('Y el numero?')
@@ -370,23 +438,60 @@ case 'add':
             }
             break
 
+case 'ban':
+            if (!isOwner) return reply(baby.only.ownerB)
+            //if (!itsMe) return reply(baby.only.ownerB)
+            mentioned = choute.message.extendedTextMessage.contextInfo.mentionedJid
+            if (mentioned.length !== 0){
+            for (let i = 0; i < mentioned.length; i++){
+            addBanned(mentioned[0], args[1], ban)
+            }
+            mentions(`@${mentioned[0].split('@')[0]} Estas baneado no podes usar el bot :D`, mentioned, true)
+            } else if (isQuotedMsg) {
+            if (quotedMsg.sender.match('18299897014')) return reply(`🤨`)
+            addBanned(quotedMsg.sender, args[1], ban)
+            mentions(`@${mentioned[0].split('@')[0]} Estas baneado no podes usar el bot :D`, mentioned, true)
+            } else if (!isNaN(args[1])) {
+            addBanned(args[1] + '@s.whatsapp.net', args[2], ban)
+            mentions(`@${mentioned[0].split('@')[0]} Estas baneado no podes usar el bot :D`, mentioned, true)
+            }
+            break
+
+case 'unban':
+            if (!isOwner) return reply(baby.only.ownerB)
+            if (!itsMe) return reply(baby.only.owner)
+            mentioned = choute.message.extendedTextMessage.contextInfo.mentionedJid
+            if (mentioned.length !== 0){
+            for (let i = 0; i < mentioned.length; i++){
+            unBanned(mentioned[i], ban)
+            }
+            mentions(`@${mentioned[0].split('@')[0]} Haz sido desbaneado, ia podes volver a usar el bot`, mentioned, true)
+            }if (isQuotedMsg) {
+            unBanned(quotedMsg.sender, ban)
+            mentions(`@${mentioned[0].split('@')[0]} Haz sido desbaneado, ia podes volver a usar el bot`, mentioned, true)
+            } else if (!isNaN(args[0])) {
+            unBanned(args[0] + '@s.whatsapp.net', ban)
+            mentions(`@${mentioned[0].split('@')[0]} Haz sido desbaneado, ia podes volver a usar el bot`, mentioned, true)
+            }
+            break
+
 case 'grupo':
-                addFilter(from)
-                if (!isGroup) return await reply(mess.only.group)
-                if (!isAdmin) return await reply(mess.only.admin)
-                if (!botAdmin) return await reply(mess.only.Badmin)
-                if (args[0] === 'abrir') {
-                leo.groupSettingChange(from, GroupSettingChange.messageSend, false).then(() => {
-                wa.sendFakeStatus(from, "*Success open group*", "GROUP SETTING")
-                })
-                } else if (args[0] === 'cerrar') {
-                leo.groupSettingChange(from, GroupSettingChange.messageSend, true).then(() => {
-                wa.sendFakeStatus(from, "*Succes close group*", "GROUP SETTING")
-                })
-                } else {
-                await reply(`Example: ${prefix}${command} open/close`)
-                }
-                break
+            addFilter(from)
+            if (!isGroup) return await reply(baby.only.group)
+            if (!isAdmin) return await reply(baby.only.admin)
+            if (!botAdmin) return await reply(baby.only.Badmin)
+            if (args[0] === 'abrir') {
+            leo.groupSettingChange(from, GroupSettingChange.messageSend, false).then(() => {
+            wa.sendFakeStatus(from, "*Success open group*", "GROUP SETTING")
+            })
+            } else if (args[0] === 'cerrar') {
+            leo.groupSettingChange(from, GroupSettingChange.messageSend, true).then(() => {
+            wa.sendFakeStatus(from, "*Succes close group*", "GROUP SETTING")
+            })
+            } else {
+            await reply(`Example: ${prefix}${command} open/close`)
+            }
+            break
 
 case 'nuevonombre':
 case 'changename':
@@ -433,7 +538,8 @@ case 'listadmins':
 case 'listadmin':
 case 'adminlist':
 case 'adminslist': 
-            if (!isRegister) return reply(baby.only.usrReg)		
+            if (!isRegister) return reply(baby.only.usrReg)
+            if (isBan) return reply (baby.only.benned)	
             if (!isGroup) return reply(baby.only.group)
             adm = `*Este grupo* *${groupMetadata.subject}*\nTiene ${groupAdmins.length} Administradores.\n\n`
             no = 0
@@ -447,39 +553,27 @@ case 'adminslist':
 case 'soporte':
 case 'support':
             if (!isRegister) return reply(userB(prefix))
-            dylux = `📌 *Grupo soporte del Bot*\n\n${gpwha}`
+            dylux = `*Grupo soporte del Bot*\n\n${gpwha}`
             reply(dylux) 
             break
 
 case 'link':
 case 'enlace':
+            if (isBan) return reply (baby.only.benned)	
             if (!isRegister) return reply(baby.only.usrReg)
             addFilter(from)
             var link = await wa.getGroupInvitationCode(from)
             await wa.sendFakeStatus(from, link, "El lik de este grupo es")
             break
 
-
 case 'chiste':
+            if (isBan) return reply (baby.only.benned)	
             if (!isRegister) return reply(baby.only.usrReg)
             respuesta = [`¿Cuál es el colmo de un ciego?\n Enamorarse a primera vista.`, `*¿Qué le dijo un zapato a otro?* \n - Qué vida más arrastrada llevas. \n ¡MIRA LOS ZAPATOS QUE EXISTEN PARA ANDAR POR EL TECHO!`, `¿Qué le dijo un cable a otro cable? \n Somos los intocables.`, `*¿Qué le dijo batman al papel higiénico?* \n Tu eres el único que conoce mi baticueva.`, `¿Por qué llora un libro de matemáticas? \n ¡Porque tiene muchos problemas!`, `¿Qué está al final de todo? ¡La letra o!`, `¿Por qué el profe de música tiene una escalera? \n ¡Para poder llegar a las notas más altas!`, `¿Qué le dice una iguana a su hermana gemela? \n Somos iguanitas`, `*¿Cuál es el colmo del electricista?* \n ¡Que su mujer se llame Luz!`, `¿Cómo se dice pañuelo en japonés? \n Sacamoko`, `¿Cuál es el pez que huele mucho? \n ¡Peztoso!`, `¿Sabes cómo se queda un mago después de comer? \n Magordito` ]
             answer = respuesta[Math.floor(Math.random() * respuesta.length)]
-            if (!q) return reply('Y la pregunta?')
+            if (!q) return reply('Señor homosexual, pongale algo despues del comando y gracias.')
             reply(answer)
             addFilter(from)
-            break
-
-case 'infobot':		  
-            if (!isRegister) return reply(babyss.only.usrReg)	
-            leo.sendMessage(from, fs.readFileSync('./media/infobot.jpg') , MessageType.image, {quoted: choute, caption: `*𝐈𝐍𝐅𝐎𝐁𝐎𝐓*
-            \n *𝐍𝐚𝐯𝐞𝐠𝐚𝐝𝐨𝐫*: _${leo.browserDescription[1]}_
-            \n *𝐒𝐞𝐫𝐯𝐢𝐝𝐨𝐫:* _${leo.browserDescription[0]}_
-            \n *𝐕𝐞𝐫𝐬𝐢𝐨𝐧:* _${leo.browserDescription[2]}_
-            \n *𝐕𝐞𝐥𝐨𝐜𝐢𝐝𝐚𝐝:* _${process.uptime()}_
-            \n *𝐒𝐢𝐬𝐭𝐞𝐦𝐚 𝐎𝐩𝐞𝐫𝐚𝐭𝐢𝐯𝐨:* _${leo.user.phone.device_manufacturer}_
-            \n *𝐕𝐞𝐫𝐬𝐢𝐨𝐧 𝐝𝐞 𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩:* _${leo.user.phone.wa_version}_
-            \n *𝐂𝐫𝐞𝐚𝐝𝐨𝐫/𝐎𝐰𝐧𝐞𝐫:* _wa.me/18299897014_
-            \n *𝐍𝐢𝐯𝐞𝐥 𝐝𝐞 𝐁𝐚𝐭𝐞𝐫𝐢𝐚:* 
             break
 
 case 'owner':
@@ -488,12 +582,47 @@ case 'creador':
             break
 
 case 'menu':
-case 'help':
-case 'menusimple':   		  
-            if (!isRegister) return reply(babyss.only.usrReg)	
-            leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `Hola *${pushname}* \n *_NO HAY MENU_*`})
+            if (isBan) return reply (baby.only.benned)	
+            if (!isRegister) return reply(baby.only.usrReg)	
+            leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${menu}`})
             break
 
+case 'infobot':		  
+            if (!isRegister) return reply(baby.only.usrReg)	
+            leo.sendMessage(from, fs.readFileSync('./media/infobot.jpg') , MessageType.image, {quoted: choute, caption: `${infobot}`})
+            break
+
+
+
+
+case 'infocreador':
+            if (!isRegister) return reply(baby.only.usrReg)	
+            leo.sendMessage(from, fs.readFileSync('./media/imagenes/creador.jpg') , MessageType.image, {quoted: choute, caption: `${infocreador}`})
+            break
+
+case 'menuofc':
+            if (!isRegister) return reply(baby.only.usrReg)	
+            if (isBan) return reply (baby.only.benned)	
+            leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${menuofc}`})
+            break
+            
+case 'reglas':
+            if (!isRegister) return reply(baby.only.usrReg)	
+            leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${reglas}`})
+            break
+
+case 'grupos':
+            if (!isRegister) return reply(baby.only.usrReg)	
+            if (isBan) return reply (baby.only.benned)
+            leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${cgrupos}`})
+            break
+
+case 'vor':
+            if (!isRegister) return reply(baby.only.usrReg)	
+            if (isBan) return reply (baby.only.benned)
+            leo.sendMessage(from, fs.readFileSync('./media/videos/V-o-R-BabyBechoso-27-10-2021.gif') , MessageType.gif, {quoted: choute, caption: `${vor}`})
+            break
+                
 }
         
 
