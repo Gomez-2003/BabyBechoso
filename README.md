@@ -1,5 +1,5 @@
 <p align="center">
-<img media="./media/imagenes/Baby-Bechoso.png" width="140" height="140"/>
+<img media="./media/imagenes/Baby-Bechoso.png"/>
 </p>
 
 ### PROCESO DE INSTALACION
