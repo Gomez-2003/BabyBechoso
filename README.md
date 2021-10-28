@@ -11,10 +11,8 @@ Si necesita mas informacion o el bot le presenta algun problema, recuerda notifi
 </p>
 <a href="https://www.youtube.com/channel/UC-HPutaDGeTPjrCId0bXQgg"><img src="/media/redes/youtube.png" width="40" height="40"</a>
  </p>
-
 <a href="wa.me/18299897014"><img src="/media/redes/whatsapp.png" width="40" height="40"</a>
 </p>
-
  <a href="https://www.instagram.com/the_choute_/"><img src="/media/redes/instagram.png" width="40" height="40"</a>
 </p>
 
