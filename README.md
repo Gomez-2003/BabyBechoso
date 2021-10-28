@@ -3,9 +3,11 @@
 </p>
 <p align="center">
 𝗖𝗥𝗘𝗔𝗗𝗢𝗥: 𝕿𝖍𝖊𝕮𝖍𝖔𝖚𝖙𝖊
- </p>
-<p align="center">
+</p>
+
 <a href="https://www.youtube.com/channel/UC-HPutaDGeTPjrCId0bXQgg"><img src="/media/redes/youtube.png" width="40" height="40"</a>
+<a href="wa.me/18299897014"><img src="/media/redes/whatsapp.png" width="40" height="40"</a>
+<a href="https://www.instagram.com/the_choute_/"><img src="/media/redes/instagram.png" width="40" height="40"</a>
 </p>
 
 </p>
