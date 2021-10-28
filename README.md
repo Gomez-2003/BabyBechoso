@@ -14,6 +14,7 @@
 - pkg install nodejs
 - pkg install git
 - pkg install bash
+```
 Clona este repositorio</h3><img src="https://raw.githubusercontent.com/othneildrew/Best-README-Template/master/images/logo.png" alt="Logo" width="20" height="20">
   </a>
 - cd BabyBechoso
