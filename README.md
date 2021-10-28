@@ -1,6 +1,7 @@
 <p align="center">
 ![image](https://user-images.githubusercontent.com/82709682/139194239-a18772ed-fd7e-4eda-b9fe-1afb1e02fe2b.png)
 </p>
+
 ### PROCESO DE INSTALACION
 ```bash
 - pkg upgrade && update
