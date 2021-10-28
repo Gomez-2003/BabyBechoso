@@ -2,12 +2,12 @@
 <img src="./media/imagenes/Baby-Bechoso.png" width="140" height="140"/>
 </p>
 <p align="center">
-𝗖𝗥𝗘𝗔𝗗𝗢𝗥
+𝗖𝗥𝗘𝗔𝗗𝗢𝗥: 𝕿𝖍𝖊𝕮𝖍𝖔𝖚𝖙𝖊
  </p>
 <p align="center">
 <a href="https://www.youtube.com/channel/UC-HPutaDGeTPjrCId0bXQgg"><img src="/media/redes/youtube.png" width="40" height="40"</a>
 </p>
-𝕿𝖍𝖊𝕮𝖍𝖔𝖚𝖙𝖊
+
 </p>
 
 
