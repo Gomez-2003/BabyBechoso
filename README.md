@@ -21,9 +21,12 @@ Clona este repositorio
 > git clone https://github.com/thechoute/BabyBechoso
 ```
 Inicia la instalacion
+```bash
 - cd BabyBechoso
 - bash install.sh
+```
 PARA INICIAR EL BOT
+
  ```bash
 - npm start
 ```
