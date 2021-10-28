@@ -9,7 +9,7 @@ REDES SOCIALES
 </p>
 Si necesita mas informacion o el bot le presenta algun problema, recuerda notificarmero a por mis redes.
 </p>
-<a href="https://www.youtube.com/channel/UC-HPutaDGeTPjrCId0bXQgg"><img src="/media/redes/youtube.png" width="40" height="40"</a>
+<a href="https://www.youtube.com/channel/UC-HPutaDGeTPjrCId0bXQgg"><img title="MAINTENED" src="/media/redes/youtube.png" width="40" height="40"</a>
 <br>
 <a href="wa.me/18299897014"><img src="/media/redes/whatsapp.png" width="40" height="40"</a>
 <br>
