@@ -47,12 +47,15 @@ var public = config.public
 //Redes Sociales
 const { gpwha, ytchoute, gitchoute, instachoute, whachoute,} = require ('./lib/redes')
 const { reglas } = require ('./lib/reglas')
+//const {infocreador} = require ('./lib/exportaciones/infocreador')
 
 // - - 𝑬𝑿𝑷𝑶𝑹𝑻𝑨𝑪𝑰𝑶𝑵𝑬𝑺
 //const { menu } = require ('./lib/menus/menu')
 const { cgrupos } = require ('./lib/menus/cg')
-const { infobot } = require ('./lib/exportaciones/infobot')
+//const { infobot } = require ('./lib/exportaciones/infobot')
 const { vor } = require ('./lib/exportaciones/vor')
+const { A, B, C, D, E, F, G, H, I, J, K, L, M, N, Ñ, O, P, Q, R, S, T, U, V, W, X, Y, Z } = require ('./lib/exportaciones/verdad')
+const {R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, } = require ('./lib/exportaciones/retos')
 
 //Connet
 conn.connect()
@@ -227,22 +230,51 @@ const isQuotedMsg = type === 'extendedTextMessage' && content.includes('textMess
 
 const moment = require('moment-timezone')
 const jm = moment.tz('America/Santo_Domingo').format('HH:mm:ss')
+//BOTONES
+const boton = (para, contenido, footer, botones = [], choute = {}) => {
+    const buttonMessage = {
+    contentText: contenido,
+    footerText: footer,
+    buttons: botones,
+    headerType: 1
+    }
+    leo.sendMessage(para, buttonMessage, MessageType.buttonsMessage, choute)
+    }
+
+const infobot  = `*𝐈𝐍𝐅𝐎𝐁𝐎𝐓*
+*𝐂𝐫𝐞𝐚𝐝𝐨𝐫:* _𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊_ 
+*𝐍𝐨𝐦𝐛𝐫𝐞 𝐝𝐞𝐥 𝐛𝐨𝐭:* _𝕭𝖆𝖇𝖞𝕭𝖊𝖈𝖍𝖔𝖘𝖔_
+*𝐍𝐚𝐯𝐞𝐠𝐚𝐝𝐨𝐫*: _${leo.browserDescription[1]}_
+*𝐒𝐞𝐫𝐯𝐢𝐝𝐨𝐫:* _${leo.browserDescription[0]}_
+*𝐕𝐞𝐫𝐬𝐢𝐨𝐧:* _${leo.browserDescription[2]}_
+*𝐕𝐞𝐥𝐨𝐜𝐢𝐝𝐚𝐝:* _${process.uptime()}_
+*𝐒𝐢𝐬𝐭𝐞𝐦𝐚 𝐎𝐩𝐞𝐫𝐚𝐭𝐢𝐯𝐨:* _${leo.user.phone.device_manufacturer}_
+*𝐕𝐞𝐫𝐬𝐢𝐨𝐧 𝐝𝐞 𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩:* _${leo.user.phone.wa_version}_
+*𝐂𝐫𝐞𝐚𝐝𝐨𝐫/𝐎𝐰𝐧𝐞𝐫:* _wa.me/18299897014_
+*𝐍𝐢𝐯𝐞𝐥 𝐝𝐞 𝐁𝐚𝐭𝐞𝐫𝐢𝐚:* 
+*𝐓𝐢𝐞𝐦𝐩𝐨 𝐝𝐞 𝐀𝐜𝐭𝐢𝐯𝐢𝐝𝐚𝐝*:`
+
+const infocreador = `
+*CREDITOS*
+*Nombre:* _𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊_
+*WhatsApp:* ${whachoute}
+*Instagram:* ${instachoute}
+*Youtube:* ${ytchoute}
+*Github:* ${gitchoute}
+*Grupo What:* ${gpwha}`
 const menu = `
-╔═══ ⌊ 💎 *𝕭𝖆𝖇𝖞𝕭𝖊𝖈𝖍𝖔𝖘𝖔* 💎 ⌉
-╟ 𝐔𝐬𝐮𝐚𝐫𝐢𝐨: ${pushname}
-╟ 𝐖𝐚.𝐦𝐞: wa.me/${sender.split("@")[0]}
-╟ 𝐇𝐨𝐫𝐚: ${jm}
-╠════ *𝐆𝐫𝐮𝐩𝐨𝐬:* 
-╟${prefix}grupos
-╠════ *𝐃𝐞𝐬𝐜𝐚𝐫𝐠𝐚𝐬:*
-╟ ${prefix}descargas
-╠════ *𝐒𝐭𝐢𝐜𝐤𝐞𝐫:*
-╟${prefix}stickeres
-╠════ *𝐄𝐧𝐭𝐫𝐞𝐭𝐞𝐧𝐢𝐦𝐢𝐞𝐧𝐭𝐨:*
-╟${prefix}juegos
-╠════ *𝐂𝐫𝐞𝐝𝐢𝐭𝐨𝐬*
-╟${prefix}creditos
-╚════ ⌊ 𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊 ⌉ `
+*BabyBechoso* | *TheChoute*
+*INFO DEL BOT*
+${infobot}
+
+_El bot esta en proceso por lo que le faltan la mayoria de los comandos, asi que no estes iorando por que no tenga algun comando que quieras, actualmente solo tiene los comandos que principalmente se utilizan en grupos._
+
+*GRUPO DE WHATSAPP*
+${gpwha}
+
+Si quieres tener este bot, subcribete pronto subire los pasos para instalarlo.
+_https://www.youtube.com/channel/UC-HPutaDGeTPjrCId0bXQgg_
+`
 
     ///Baby
   baby = {
@@ -271,6 +303,21 @@ const menu = `
   if (isBan) return reply (baby.only.benned)  
 
 */
+if(body.includes('Info Creador OFC')) {
+    leo.sendMessage(from, `${infocreador}`, MessageType.text, {quoted: choute})
+    }
+
+if(body == ('Bot hdp')) {
+    if (!isRegister) return reply(baby.only.usrReg)	
+    if (isBan) return reply (baby.only.benned)
+        leo.sendMessage(from, 'Mas respeto, hdp es usted', MessageType.text, {quoted: choute})
+        }
+
+if(body == ('SOLO PARA ADMIN 👑')){
+        if (!isRegister) return reply(baby.only.usrReg)	
+        if (isBan) return reply (baby.only.benned)
+        leo.sendMessage(from, 'Mas respeto, hdp es usted', MessageType.text, {quoted: choute})
+        }
 
 switch (command) {
 case 'reg':   
@@ -300,14 +347,14 @@ case 'reg':
 🎓 𝐄𝐃𝐀𝐃: _${edad}_
 🎓 𝐍𝐔𝐌𝐄𝐑𝐎: wa.me/${sender.split("@")[0]}
 🎓 𝐇𝐎𝐑𝐀: _${time}_
-└────「 *${leo.user.name}* 」
+└────「 *𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊* 」
                 
 Verificación completa usa *${prefix}menu* para ver el Menu`
                 
                 daftarimg = await getBuffer(ppimg)
                 leo.sendMessage(from, daftarimg, image, {quoted: choute, caption: capt})
                 break                        
-            break
+            
 
 case 'welcome':
 case 'bv':
@@ -317,7 +364,6 @@ case 'bienvenida':
             if (isBan) return reply (baby.only.benned)	
             if (!isGroup) return reply(baby.only.group)
             if (!isAdmin) return reply(baby.only.admin)
-            if (!botAdmin) return reply(baby.only.Badmin)  
             if (args.length < 1) return reply(`*BIENVENIDAS*\n\n*${prefix + command} on* para activar\n*${prefix + command} off* para desactivar`)
             if ((args[0]) === 'on') {
             if (isWelkom) return reply('La bienvenida ya esta activa en este grupo')
@@ -333,6 +379,28 @@ case 'bienvenida':
             reply(`*BIENVENIDAS*\n\n*${prefix + command} on* para activar\n*${prefix + command} off* para desactivar`)
             }
             break
+
+case 'antilink':
+case 'antigp':
+            if (!isRegister) return reply(baby.only.usrReg)
+            if (isBan) return reply (baby.only.benned)  
+            if (!isGroup) return reply(baby.only.group)
+			if (args.length < 1) return reply(`✳️ *ANTILINK *\n\n*${prefix + command} on* para activar\n*${prefix + command} off* para desactivar`)
+			if ((args[0]) === 'on') {
+			if (isAntiLink) return reply('✳️ Antilink ya está activo')
+			antilink.push(from)
+			fs.writeFileSync('./src/antilink.json', JSON.stringify(antilink))
+			reply(`✅ Se activo el *Antilink WhatsApp* en el grupo *${groupMetadata.subject}*`)
+			} else if ((args[0]) === 'off') {
+			if (!isAntiLink) return reply('✳️ Antilink ya está desactivado')
+			antilinksplice(from, 1)
+			fs.writeFileSync('./src/antilink.json', JSON.stringify(antilink))
+			reply(`Se desactivo el *Antilink WhatsApp* en el grupo *${groupMetadata.subject}*`)
+			} else {
+			reply(`*ANTIGRUPOS*\n\n*${prefix + command} on* para activar\n*${prefix + command} off* para desactivar`)
+			}
+			break
+					
 
 case 'promote':
 case 'promover':
@@ -581,19 +649,41 @@ case 'creador':
             await wa.sendContact(from, '18299897014', "𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊")
             break
 
-case 'menu':
-            if (isBan) return reply (baby.only.benned)	
+case 'grupos':
+case 'SOLO PARA ADMIN👑':
             if (!isRegister) return reply(baby.only.usrReg)	
-            leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${menu}`})
+            if (isBan) return reply (baby.only.benned)
+            leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${cgrupos}`})
+            break
+
+case 'vor':
+            if (!isRegister) return reply(baby.only.usrReg)	
+            leo.sendMessage(from, fs.readFileSync('./media/imagenes/vor.jpg') , MessageType.image, {quoted: choute, caption: `${vor}`})
+            break
+
+case 'v':
+            if (isBan) return reply (baby.only.benned)	
+            if (!isRegister) return reply(baby.only.usrReg)
+            respuesta = [`${A}`,`${B}`,`${C}`, `${D}`,`${E}`,`${F}`,`${G}`,`${H}`,`${I}`,`${J}`,`${K}`,`${L}`,`${M}`,`${N}`,`${Ñ}`,`${O}`,`${P}`,`${Q}`,`${R}`,`${S}`,`${T}`,`${U}`,`${V}`,`${W}`,`${X}`,`${Y}`,`${Z}`]
+            answer = respuesta[Math.floor(Math.random() * respuesta.length)]
+            if (!q) return reply('Nomessirve te falto ponerle espacio y la r')
+            reply(answer)
+            addFilter(from)
+            break
+case 'r':
+            if (isBan) return reply (baby.only.benned)	
+            if (!isRegister) return reply(baby.only.usrReg)
+            respuesta = [ `${R1}`, `${R2}`, `${R3}`, `${R4}`, `${R5}`, `${R6}`, `${R7}`, `${R8}`, `${R9}`, `${R10}`, `${R11}`, `${R12}`, `${R13}`, `${R14}`, `${R15}`, `${R16}`, `${R17}`, `${R18}`, `${R19}`, `${R20}`, `${R21}`, `${R22}`, `${R23}`, `${R24}`, `${R25}`]
+            answer = respuesta[Math.floor(Math.random() * respuesta.length)]
+            if (!q) return reply('Nomessirve te falto ponerle espacio y la v')
+            reply(answer)
+            addFilter(from)
             break
 
 case 'infobot':		  
             if (!isRegister) return reply(baby.only.usrReg)	
             leo.sendMessage(from, fs.readFileSync('./media/infobot.jpg') , MessageType.image, {quoted: choute, caption: `${infobot}`})
             break
-
-
-
 
 case 'infocreador':
             if (!isRegister) return reply(baby.only.usrReg)	
@@ -611,18 +701,66 @@ case 'reglas':
             leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${reglas}`})
             break
 
-case 'grupos':
-            if (!isRegister) return reply(baby.only.usrReg)	
-            if (isBan) return reply (baby.only.benned)
-            leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${cgrupos}`})
+case 'prueba':
+            boton(from, fs.readFileSync('./media/imagenes/menu.jpg'), MessageType.image, 'Hola', `${pushname}`, [{buttonId: 'b1', buttonText: {displayText: 'Click Aqui'}, type: 1}])           
             break
 
-case 'vor':
-            if (!isRegister) return reply(baby.only.usrReg)	
-            if (isBan) return reply (baby.only.benned)
-            leo.sendMessage(from, fs.readFileSync('./media/videos/V-o-R-BabyBechoso-27-10-2021.gif') , MessageType.gif, {quoted: choute, caption: `${vor}`})
-            break
+
+case 'menus':
+
+let lista = leo.prepareMessageFromContent(from,{
+"listMessage": {
+"title": `Hola ${pushname}`,
+"description": `${menu}`,
+"buttonText": "Lista de Menus",
+"listType": "SINGLE_SELECT",
+"sections": [
+{ "title": `Memu de Grupos`,
+"description": 'Estos comandos solo sirven para ser utilizados en grupos.',
+"rows": [
+{
+"title": 'Menu solo para administradores',
+"rowId": `row1`
+},
+{
+"title": 'Menu para miembros',
+"description": 'Estos comandos pueden ser utilizados por todos los miembros del grupo',
+"rowId": `row2`
+}
+]
+},
+{
+"title": `Menu de Juegos / Entretenimiento`,
+"rows": [
+{
+"title": 'Lista de juegos ',
+"description": 'Estos comandos solo pueden ser utilizados por el creador del bot o el numero que actualmente tiene el bot en su dispositivo.',
+"rowId": `row 2`
+},
+{
+"title": 'Grupos de WhatsApp',
+"description": 'Lista de grupos de',
+"rowId": `row 2`
+}
+]    
+},
+{
+"title": `CREDITOS`,
+"rows": [
+ {
+"title": 'Info Creador OFC',
+"description": 'Creador Oficial del bot',
+"rowId": `row 2`
+}
+]    
+},
+]
+}
+}, {quoted: choute})
+leo.relayWAMessage(lista)          
+break
                 
+
 }
         
 
