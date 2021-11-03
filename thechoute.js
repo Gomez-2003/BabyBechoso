@@ -1115,7 +1115,6 @@ case 'audio':
             break
 
 case 'menu':
-leo.sendMessage(from, `Si no ves la lista de los menus, puedes utilizar el comando ${prefix}menuofc `, MessageType.text, {quoted: choute})
 aud = fs.readFileSync('./media/audio/audio.mp3') 
 leo.sendMessage(from, aud, audio, {quoted: choute, mimetype: 'audio/mp4', ptt: true, duration: -999999, sendEphemeral: true})
 let lista = leo.prepareMessageFromContent(from,{
