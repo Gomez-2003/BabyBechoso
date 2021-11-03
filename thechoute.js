@@ -27,6 +27,9 @@ const {
   const prefix = '.'
   const moment = require("moment-timezone");
   const yts = require('yt-search')
+  const LeoGg = require('google-it');
+  const LeoGgImg = require('g-i-s');
+  const fetch = require('node-fetch');
   const _registered = JSON.parse(fs.readFileSync('./src/registered.json'))
   const welkom = JSON.parse(fs.readFileSync('./src/welkom.json'))
   const antilink = JSON.parse(fs.readFileSync('./src/antilink.json'))
@@ -61,7 +64,7 @@ const {
   const { A, B, C, D, E, F, G, H, I, J, K, L, M, N, Ñ, O, P, Q, R, S, T, U, V, W, X, Y, Z } = require ('./lib/exportaciones/verdad')
   const {R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, } = require ('./lib/exportaciones/retos')
   //ᴘᴀʀᴀ ᴇʟ ᴍᴇɴᴜ ᴅᴇ ʙᴏᴛᴏɴᴇꜱ
-  const { cadmin, juegos, cmiembros, owners} = require ('./lib/botones')
+  const { cadmin, juegos, cmiembros, owners, nuevo} = require ('./lib/botones')
   const { linkgp } = require ('./lib/exportaciones/linkgp')
   const { cowner } = require ('./lib/exportaciones/owner')
   //Connet
@@ -184,6 +187,9 @@ const {
       const reply = (teks) => {	
           leo.sendMessage(from, teks, text, {sendEphemeral: true, quoted: choute})
           }
+        const isUrl = (url) => {
+            return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/, 'gi'))
+                    }
   
       if (prefix != "") {
       if (!body.startsWith(prefix)) {
@@ -266,6 +272,35 @@ const {
       })
       })
       }
+      const sendMediaURL = async(to, url, text="", mids=[]) =>{
+        if(mids.length > 0){
+            text = mentions(text, mids, true)
+        }
+        const fn = Date.now() / 10000;
+        const filename = fn.toString()
+        let mime = ""
+        var download = function (uri, filename, callback) {
+            request.head(uri, function (err, res, body) {
+                mime = res.headers['content-type']
+                request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+            });
+        };
+        download(url, filename, async function () {
+            console.log('');
+            let media = fs.readFileSync(filename)
+            let type = mime.split("/")[0]+"Message"
+            if(mime === "image/gif"){
+                type = MessageType.video
+                mime = Mimetype.gif
+            }
+            if(mime.split("/")[0] === "audio"){
+                mime = Mimetype.mp4Audio
+            }
+            leo.sendMessage(to, media, type, { quoted: choute, mimetype: mime, caption: text,contextInfo: {"mentionedJid": mids}})
+            
+            fs.unlinkSync(filename)
+        });
+    }
   
   
   const moment = require('moment-timezone')
@@ -283,7 +318,17 @@ const {
   
   
   
-  
+  const yo = `𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊`
+
+const quecanciones = `
+*Porfavor, es nesesario que envies el link de la musica para poder continuar, si no sabes como sacar el link de un audio.
+
+_Puedes ver el siguiente video_
+__
+
+*Link utilizado en el video*
+_https://files.catbox.moe_`
+
   const infobot  = `*INFOBOT*
   *Creador* 𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊 
   *Nombre del bot:* 𝕭𝖆𝖇𝖞𝕭𝖊𝖈𝖍𝖔𝖘𝖔
@@ -304,7 +349,7 @@ const {
   🎓 *XP:* ${getLevelingXp(sender)}
   🎓 *Hora:* ${jm}
   └────────────
-  Si quieres saber como tener este bot, subcribete al canal pronto el creador subira como ponerlo; 
+Como instarlar el bot; 
   _https://www.youtube.com/channel/UC-HPutaDGeTPjrCId0bXQgg_
   ┌────「 *INFO DEL BOT*」─
   🎓 *𝙽𝚘𝚖𝚋𝚛𝚎 :* BabyBechoso
@@ -361,8 +406,32 @@ const {
     if (!isAdmin) return reply(baby.only.admin)
     if (!botAdmin) return reply(baby.only.Badmin)
     if (isBan) return reply (baby.only.benned)  
+case 'audio':
+            addFilter(from)
+            aud = fs.readFileSync('./media/audio/audio.mp3') 
+            leo.sendMessage(from, aud, audio, {quoted: choute, mimetype: 'audio/mp4', ptt: true, duration: -999999, sendEphemeral: true}) 
+            break
   
   */
+    const faud = {
+        key:
+        { fromMe: false,
+        participant: `0@s.whatsapp.net`, ...(from ?
+        { remoteJid: "status@broadcast" } : {}) },
+        message: { "audioMessage": {"mimetype": "audio/mp4", "ptt": true, "seconds": -999999}}
+        }
+        contextInfo: {
+        mentionedJid: [sender]}
+/*const faud = {
+            key:
+            { fromMe: false,
+            participant: `0@s.whatsapp.net`, ...(from ?
+            { remoteJid: "status@broadcast" } : {}) },
+            message: { "audioMessage": {"mimetype": "audio/mp4", "ptt": true, "seconds": -999999}}
+            }
+            contextInfo: {
+            mentionedJid: [sender]}*/
+
 //ᴘᴀʀᴀ ᴇʟ ᴍᴇɴᴜ ᴅᴇ ʙᴏᴛᴏɴᴇꜱ
 //ᴘᴀʀᴀ ᴀᴅᴍɪɴᴇꜱ ᴅᴇʟ ɢʀᴜᴘᴏ  
 if (choute.message.listResponseMessage){
@@ -421,6 +490,7 @@ if (test.includes(`creador`)){
 leo.updatePresence(from, Presence.composing)
 if (!isRegister) return reply(baby.only.usrReg)
 uptime = process.uptime()
+leo.sendMessage(from, fs.readFileSync('./media/imagenes/creador.jpg') , MessageType.image, {quoted: choute, caption: `${infocreador}`})
 await wa.sendContact(from, '18299897014', "𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊")
 addFilter(from)
 addLevelingLevel(sender, 5)	}}
@@ -446,9 +516,36 @@ leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType
 addFilter(from)
 addLevelingLevel(sender, 5)	}}
 
+//Nuevo
+if (choute.message.listResponseMessage){
+test = choute.message.listResponseMessage.singleSelectReply.selectedRowId
+if (test.includes(`nuevo`)){
+leo.updatePresence(from, Presence.composing)
+if (!isRegister) return reply(baby.only.usrReg)
+uptime = process.uptime()
+leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${nuevo}`})
+addFilter(from)
+addLevelingLevel(sender, 5)	}}
+//CONVERSACION //AUDIO
+if(body == ('Soy nuevo')) {
+aud = fs.readFileSync('./media/audio/Bienvenido - Chui.mp3') 
+leo.sendMessage(from, aud, audio, {quoted: choute, mimetype: 'audio/mp4', ptt: true, sendEphemeral: true}) 
+}
 
+if(body == ('Soy nuevo')) {
+aud = fs.readFileSync('./media/audio/Bienvenido - Chui.mp3') 
+leo.sendMessage(from, aud, audio, {quoted: choute, mimetype: 'audio/mp4', ptt: true, duration: -999999, sendEphemeral: true}) 
+}
+//TEXTOS
+if(body == ('hola')) {
+leo.sendMessage(from, 'como estas!', MessageType.text, {quoted: choute})}
 
   switch (command) {
+case 'bot':
+            addFilter(from)
+            aud = fs.readFileSync('./media/audio/audio.mp3') 
+            leo.sendMessage(from, aud, audio, {quoted: choute, mimetype: 'audio/mp4', ptt: true, duration: -999999, sendEphemeral: true}) 
+            break
   case 'reg':   
               if (isRegister) return reply('*Tu Ya Estas Registrado, o No Lo Recuerdas?*')
               if (!q.includes('|')) return  reply(`*PORFAVOR ESCRIBE BIEN EL FORMATO DE REGISTRO:* ${prefix}reg *Nombre|Edad* con el *|* que los divide.`)
@@ -478,7 +575,6 @@ addLevelingLevel(sender, 5)	}}
   🎓 𝐇𝐎𝐑𝐀: _${time}_
   └────「 *𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊* 」
   Verificación completa usa *${prefix}menu* para ver el Menu`
-                  
                   daftarimg = await getBuffer(ppimg)
                   leo.sendMessage(from, daftarimg, image, {quoted: choute, caption: capt})
                   break                        
@@ -632,46 +728,10 @@ addLevelingLevel(sender, 5)	}}
               leo.groupAdd(from, [num])
               } catch (e) {
               console.log('Error :', e)
-              return leo.sendMessagee(from, 'Modo privado dice:v', messageType.text)
+              return leo.sendMessage(from, 'Modo privado dice:v', MessageType.text)
               }
               break
   
-  case 'ban':
-              if (!isOwner) return reply(baby.only.ownerB)
-              //if (!itsMe) return reply(baby.only.ownerB)
-              mentioned = choute.message.extendedTextmessage.contextInfo.mentionedJid
-              if (mentioned.length !== 0){
-              for (let i = 0; i < mentioned.length; i++){
-              addBanned(mentioned[0], args[1], ban)
-              }
-              mentions(`@${mentioned[0].split('@')[0]} Estas baneado no podes usar el bot :D`, mentioned, true)
-              } else if (isQuotedMsg) {
-              if (quotedMsg.sender.match('18299897014')) return reply(`🤨`)
-              addBanned(quotedMsg.sender, args[1], ban)
-              mentions(`@${mentioned[0].split('@')[0]} Estas baneado no podes usar el bot :D`, mentioned, true)
-              } else if (!isNaN(args[1])) {
-              addBanned(args[1] + '@s.whatsapp.net', args[2], ban)
-              mentions(`@${mentioned[0].split('@')[0]} Estas baneado no podes usar el bot :D`, mentioned, true)
-              }
-              break
-  
-  case 'unban':
-              if (!isOwner) return reply(baby.only.ownerB)
-              if (!itsMe) return reply(baby.only.owner)
-              mentioned = choute.message.extendedTextmessage.contextInfo.mentionedJid
-              if (mentioned.length !== 0){
-              for (let i = 0; i < mentioned.length; i++){
-              unBanned(mentioned[i], ban)
-              }
-              mentions(`@${mentioned[0].split('@')[0]} Haz sido desbaneado, ia podes volver a usar el bot`, mentioned, true)
-              }if (isQuotedMsg) {
-              unBanned(quotedMsg.sender, ban)
-              mentions(`@${mentioned[0].split('@')[0]} Haz sido desbaneado, ia podes volver a usar el bot`, mentioned, true)
-              } else if (!isNaN(args[0])) {
-              unBanned(args[0] + '@s.whatsapp.net', ban)
-              mentions(`@${mentioned[0].split('@')[0]} Haz sido desbaneado, ia podes volver a usar el bot`, mentioned, true)
-              }
-              break
   
   case 'grupo':
               addFilter(from)
@@ -704,8 +764,8 @@ addLevelingLevel(sender, 5)	}}
               })
               break
   
-  case 'nuevadescripcion':        
-  case 'changedescripcion':
+case 'nuevadescripcion':        
+case 'changedescripcion':
               addFilter(from)
               if (!isGroup) return await reply(baby.only.group)
               if (!isAdmin) return await reply(baby.only.admin)
@@ -715,10 +775,41 @@ addLevelingLevel(sender, 5)	}}
               wa.sendFakeStatus(from, "EL NUEVO NOMBRE DEL GRUPO ES  " + newDesc, "GROUP SETTING")
               })
               break
-  
-  
-  case 'visto':
-  case 'sider':
+
+case 'play':
+case 'ytmp3':
+                reply(`*Espere un momento, su audio ${q} se esta descargando...*`)
+                teks = args.join(' ')
+                if (!teks.endsWith("-doc")){
+                res1 = await yts(q).catch(e => {	
+                reply('*NO HE ENCONTRADO LO QUE BUSCABAS*')
+                })	
+                let thumbInfo = ` [ *${res1.all[0].title}* ]
+*Subido* ${res1.all[0].ago}
+*Vistas :* ${res1.all[0].views}
+*Duracion :* ${res1.all[0].timestamp}
+*Canal :* ${res1.all[0].author.name}
+*°Link del Canal :* ${res1.all[0].author.url}
+*Elaudio se esta enviando*
+_Esto puede demorar hasta 2 minutos, no hagas spam del comando_` 
+                sendFileFromUrl(res1.all[0].image, image, {quoted: choute, caption: thumbInfo})
+                res1 = await y2mateA(res1.all[0].url).catch(e => {
+                pr21 = getJson(`https://api.zeks.xyz/api/ytmp3?apikey=hamilton20&url=${res1.all[0].url}`)	
+                reply(`:D*`)
+                sendFileFromUrl(pr21.result.url_audio, audio, {quoted: choute, mimetype: 'audio/mp4', filename: res1[0].output})
+                sendFileFromUrl(pr21.result.url_audio, audio, {quoted: choute, mimetype: 'audio/mp4', ptt: true, filename: res1[0].output})
+                })
+                sendFileFromUrl(res1[0].link, audio, {quoted: choute, mimetype: 'audio/mp4', filename: res1[0].output})
+                sendFileFromUrl(res1[0].link, audio, {quoted: choute, mimetype: 'audio/mp4', ptt: true, filename: res1[0].output})
+                }
+                addFilter(from)
+                addLevelingLevel(sender, 5)		
+                break 
+      
+            
+
+case 'visto':
+case 'sider':
               if (!isRegister) return reply(baby.only.usrReg)
               if (!isGroup) return reply(baby.only.group)
               infom = await leo.messageInfo(from, choute.message.extendedTextmessage.contextInfo.stanzaId)
@@ -732,10 +823,10 @@ addLevelingLevel(sender, 5)	}}
               mentions(teks, tagg, true)
               break
   
-  case 'listadmins':
-  case 'listadmin':
-  case 'adminlist':
-  case 'adminslist': 
+case 'listadmins':
+case 'listadmin':
+case 'adminlist':
+case 'adminslist': 
               if (!isRegister) return reply(baby.only.usrReg)
               if (isBan) return reply (baby.only.benned)	
               if (!isGroup) return reply(baby.only.group)
@@ -748,70 +839,15 @@ addLevelingLevel(sender, 5)	}}
               mentions(adm, groupAdmins, true)
               break
   
-  /*case 'play':
-  case 'ymp3':	
-              if (isBan) return reply (baby.only.benned)	
-              if (!isRegister) return reply(baby.only.usrReg)
-              if (!q) return reply('*Que audio quieres descargar?.....*')
-              let plist = await yts(q)
-              sendFileFromUrl(plist.all[0].image, image, {quoted: choute, caption: '_*Si no ves la lista de descarga de tu audio, prueba usando el comando play2*_'})
-              
-              let play2v = leo.preparemessageFromContent(from,{
-                      "listmessage": {
-                                "title": "🌬 *DESCARGAS DE AUDIO!!*",
-                                "description": `\n✍🏻Informacion de su Audio.\n\n*°Subido hace* ${plist.all[0].ago}\n\n*°Vistas :* ${plist.all[0].views}\n\n*°Duracion :* ${plist.all[0].timestamp}\n\n*°Canal :* ${plist.all[0].author.name}\n\n*°Link del Canal :* ${plist.all[0].author.url}`,
-                                "buttonText": "SELECCIONA UN FORMATO DE DESCARGA",
-                                "listType": "SINGLE_SELECT",
-                                "sections": [
-                                  { "title": `[ ${plist.all[0].title} ]`,
-                                    "rows": [
-                                      {
-                                        "title": '🎧Descarga el Audio Original',
-                                        "description": '- Audio en mp3 sin modificacion de duracion -',
-                                        "rowId": `${plist.all[0].title}@list`
-                                      },
-                                      {
-                                        "title": '🎙Descarga el Audio Original en Nota de Voz',
-                                        "description": '- Audio en nota de voz sin modificacion de duracion -',
-                                        "rowId": `${plist.all[0].title}@list1`
-                                      },
-                                      {
-                                        "title": '🎧Descarga el Audio Original con duracion cambiada',
-                                        "description": '- Audio en mp3 con modificacion de duracion -',
-                                        "rowId": `${plist.all[0].title}@list2`
-                                      },
-                                      {
-                                        "title": '🎙Descarga el Audio Original en Nota de Voz con duracion cambiada',
-                                        "description": '- Audio en nota de voz con modificacion de duracion -',
-                                        "rowId": `${plist.all[0].title}@list3`
-                                      }
-                                    ]
-                                  },
-                                  {
-                                      "title": `[ Audio con Efecto ]`,
-                                      "rows": [
-                                        {
-                                          "title": '💎Descarga el Audio Con efecto SlowMotion',
-                                          "description": '- Audio en nota de voz con efecto SlowMotion -',
-                                          "rowId": `${plist.all[0].title}@list4`
-                                        }
-                                      ]    
-                                  }
-                                ]
-                              }
-                    }, {quoted: choute})
-                    leo.relayWAmessage(play2v)
-              
-              break*/
-  case 'soporte':
-  case 'support':
+case 'soporte':
+case 'support':
               if (!isRegister) return reply(userB(prefix))
               dylux = `*Grupo soporte del Bot*\n\n${gpwha}`
               reply(dylux) 
               break
   
-  case 'link':
-  case 'enlace':
+case 'link':
+case 'enlace':
               if (isBan) return reply (baby.only.benned)	
               if (!isRegister) return reply(baby.only.usrReg)
               addFilter(from)
@@ -819,7 +855,7 @@ addLevelingLevel(sender, 5)	}}
               await wa.sendFakeStatus(from, link, "El lik de este grupo es")
               break
   
-  case 'chiste':
+case 'chiste':
               if (isBan) return reply (baby.only.benned)	
               if (!isRegister) return reply(baby.only.usrReg)
               respuesta = [`¿Cuál es el colmo de un ciego?\n Enamorarse a primera vista.`, `*¿Qué le dijo un zapato a otro?* \n - Qué vida más arrastrada llevas. \n ¡MIRA LOS ZAPATOS QUE EXISTEN PARA ANDAR POR EL TECHO!`, `¿Qué le dijo un cable a otro cable? \n Somos los intocables.`, `*¿Qué le dijo batman al papel higiénico?* \n Tu eres el único que conoce mi baticueva.`, `¿Por qué llora un libro de matemáticas? \n ¡Porque tiene muchos problemas!`, `¿Qué está al final de todo? ¡La letra o!`, `¿Por qué el profe de música tiene una escalera? \n ¡Para poder llegar a las notas más altas!`, `¿Qué le dice una iguana a su hermana gemela? \n Somos iguanitas`, `*¿Cuál es el colmo del electricista?* \n ¡Que su mujer se llame Luz!`, `¿Cómo se dice pañuelo en japonés? \n Sacamoko`, `¿Cuál es el pez que huele mucho? \n ¡Peztoso!`, `¿Sabes cómo se queda un mago después de comer? \n Magordito` ]
@@ -829,25 +865,25 @@ addLevelingLevel(sender, 5)	}}
               addFilter(from)
               break
   
-  case 'owner':
-  case 'creador':
+case 'owner':
+case 'creador':
               await wa.sendContact(from, '18299897014', "𝕿𝖍ٌ𝖊𝕮𝖍𝖔𝖚𝖙𝖊")
               break
               
   
-  case 'grupos':
-      case 'menus':
+case 'grupos':
+case 'menus':
               if (!isRegister) return reply(baby.only.usrReg)	
               if (isBan) return reply (baby.only.benned)
-              leo.sendMessagee(from, fs.readFileSync('./media/imagenes/menu.jpg') , messageType.image, {quoted: choute, caption: `${cgrupos}`})
+              leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${cgrupos}`})
               break
   
-  case 'vor':
+case 'vor':
               if (!isRegister) return reply(baby.only.usrReg)	
-              leo.sendMessagee(from, fs.readFileSync('./media/imagenes/vor.jpg') , messageType.image, {quoted: choute, caption: `${vor}`})
+              leo.sendMessage(from, fs.readFileSync('./media/imagenes/vor.jpg') , MessageType.image, {quoted: choute, caption: `${vor}`})
               break
   
-  case 'v':
+case 'v':
               if (isBan) return reply (baby.only.benned)	
               if (!isRegister) return reply(baby.only.usrReg)
               respuesta = [`${A}`,`${B}`,`${C}`, `${D}`,`${E}`,`${F}`,`${G}`,`${H}`,`${I}`,`${J}`,`${K}`,`${L}`,`${M}`,`${N}`,`${Ñ}`,`${O}`,`${P}`,`${Q}`,`${R}`,`${S}`,`${T}`,`${U}`,`${V}`,`${W}`,`${X}`,`${Y}`,`${Z}`]
@@ -856,7 +892,7 @@ addLevelingLevel(sender, 5)	}}
               reply(answer)
               addFilter(from)
               break
-  case 'r':
+case 'r':
               if (isBan) return reply (baby.only.benned)	
               if (!isRegister) return reply(baby.only.usrReg)
               respuesta = [ `${R1}`, `${R2}`, `${R3}`, `${R4}`, `${R5}`, `${R6}`, `${R7}`, `${R8}`, `${R9}`, `${R10}`, `${R11}`, `${R12}`, `${R13}`, `${R14}`, `${R15}`, `${R16}`, `${R17}`, `${R18}`, `${R19}`, `${R20}`, `${R21}`, `${R22}`, `${R23}`, `${R24}`, `${R25}`]
@@ -868,24 +904,24 @@ addLevelingLevel(sender, 5)	}}
   
   case 'infobot':		  
               if (!isRegister) return reply(baby.only.usrReg)	
-              leo.sendMessagee(from, fs.readFileSync('./media/infobot.jpg') , messageType.image, {quoted: choute, caption: `${infobot}`})
+              leo.sendMessage(from, fs.readFileSync('./media/infobot.jpg') , MessageType.image, {quoted: choute, caption: `${infobot}`})
               break
   
   case 'infocreador':
               if (!isRegister) return reply(baby.only.usrReg)	
-              leo.sendMessagee(from, fs.readFileSync('./media/imagenes/creador.jpg') , messageType.image, {quoted: choute, caption: `${infocreador}`})
+              leo.sendMessage(from, fs.readFileSync('./media/imagenes/creador.jpg') , MessageType.image, {quoted: choute, caption: `${infocreador}`})
               break
   
   
   case 'menuofc':
               if (!isRegister) return reply(baby.only.usrReg)	
               if (isBan) return reply (baby.only.benned)	
-              leo.sendMessagee(from, fs.readFileSync('./media/imagenes/menu.jpg') , messageType.image, {quoted: choute, caption: `${menuofc}`})
+              leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${menuofc}`})
               break
               
   case 'reglas':
               if (!isRegister) return reply(baby.only.usrReg)	
-              leo.sendMessagee(from, fs.readFileSync('./media/imagenes/menu.jpg') , messageType.image, {quoted: choute, caption: `${reglas}`})
+              leo.sendMessage(from, fs.readFileSync('./media/imagenes/menu.jpg') , MessageType.image, {quoted: choute, caption: `${reglas}`})
               break
   
   case 'prueba':
@@ -896,35 +932,27 @@ addLevelingLevel(sender, 5)	}}
   case 'level':
   case 'nivel':
               const lvup =  `${nivel}` 
-              leo.sendMessagee(from, lvup, messageType.text, {quoted: choute} )
+              leo.sendMessage(from, lvup, MessageType.text, {quoted: choute} )
               break
-  
-  case 'audio':
-              addFilter(from)
-              aud = fs.readFileSync('./audio/audio.mp3') 
-              leo.sendMessagee(from, aud, audio, {quoted: choute, mimetype: 'audio/mp4', ptt: true, duration: -999999, sendEphemeral: true}) 
-              break
-  
-  case 'desbechoso':
-              if (!isRegister) return reply(baby.only.usrReg)	
-              leo.sendMessagee(from, fs.readFileSync('./media/imagenes/menu.jpg') , messageType.image, {quoted: choute, caption: `${bechoso}`})
-              break
+ 
+
   case 'top5':
-  addFilter(from)
-  if (!isGroup) return reply('Top5 en un chat? Te gusta la pija cierto. Este comando es solo para grupos.')
-  member = []
-  top5 = args.join(' ')
-  const p1 = groupMembers
-  const p2 = groupMembers
-  const p3 = groupMembers
-  const p4 = groupMembers
-  const p5 = groupMembers
-  const o1 = p1[Math.floor(Math.random() * p1.length)]
-  const o2 = p2[Math.floor(Math.random() * p2.length)]
-  const o3 = p3[Math.floor(Math.random() * p3.length)]
-  const o4 = p4[Math.floor(Math.random() * p4.length)]
-  const o5 = p5[Math.floor(Math.random() * p5.length)]
-  teks = `
+            if (!isRegister) return reply(baby.only.usrReg)
+            addFilter(from)
+            if (!isGroup) return reply('Top5 en un chat? Te gusta la pija cierto. Este comando es solo para grupos.')
+            member = []
+            top5 = args.join(' ')
+            const p1 = groupMembers
+            const p2 = groupMembers
+            const p3 = groupMembers
+            const p4 = groupMembers
+            const p5 = groupMembers
+            const o1 = p1[Math.floor(Math.random() * p1.length)]
+            const o2 = p2[Math.floor(Math.random() * p2.length)]
+            const o3 = p3[Math.floor(Math.random() * p3.length)]
+            const o4 = p4[Math.floor(Math.random() * p4.length)]
+            const o5 = p5[Math.floor(Math.random() * p5.length)]
+            teks = `
   *Atencion estos son los 5*\n\n *Primer puesto para* @${o1.jid.split('@')[0]}\n\n*Segundo puesto para*@${o2.jid.split('@')[0]}\n\n*Tercer puesto para*@${o3.jid.split('@')[0]}\n\n*Cuarto puesto para* @${o4.jid.split('@')[0]}\n\n*Quinto puesto para* @${o5.jid.split('@')[0]}\n\n\n_Top 5 de_ *${top5}* en este grupo`
   member.push(o1.jid)
   member.push(o2.jid)
@@ -933,19 +961,163 @@ addLevelingLevel(sender, 5)	}}
   member.push(o5.jid)
   mentions(teks, member, true)
   break
-  
-  
-  
-  //ᴏᴡɴᴇʀ / ᴄʀᴇᴀᴅᴏʀ ᴅᴇʟ ʙᴏᴛ / ɴᴜᴍᴇʀᴏ ᴅᴇʟ ʙᴏᴛ
-  case 'apagar':
-  case 'off':
-              if (!isOwner) return reply('XD No puedes usar este comando')
+
+case 'lirik':
+case 'letra':
+case 'letras':
+            if (args.length < 1) return reply('Escribe el nombre de la cancion')
+            if (!isRegister) return reply(baby.only.usrReg)
+            leo.updatePresence(from, Presence.composing)
+            if (!q) return reply('*Cual es el nombre de la cancion?*')
+            try {
+            anu = await getJson(`https://some-random-api.ml/lyrics?title=${q}`)
+            lyrics = `El resultado de ${anu.title}:\n\n*Autor:* ${anu.author}\n\n____________________\n\n${anu.lyrics}\n\n🌬Link: ${anu.links.genius}`
+            sendFileFromUrl(anu.thumbnail.genius, image, {quoted: choute, caption: lyrics, sendEphemeral: true})
+            } catch {
+            reply(baby.ferr)
+            }
+            addFilter(from)
+            break
+
+case 'quecanciones':
+case 'quemusicaes':
+                if (!isRegister) return reply(baby.only.usrReg)
+                if (!q) return reply(`${quecanciones}`)
+                if (!isUrl) return reply('Porfavor envia especificamente un link de la musica')
+                reply(baby.wait)
+                musica = await getJson(`https://api.lolhuman.xyz/api/musicsearch?apikey=${api}&file=${q}`)
+                p = musica.result              
+                break       
+
+case 'google':
+                if (!isRegister) return reply(baby.only.usrReg)
+                let buscar = args.join(' ')
+                if (!buscar) return reply('Que deseas buscar?')
+                let search = await LeoGg({ query: buscar })
+                let ggsm = ``
+                for (let i of search) {
+                ggsm += `
+*Titulo :* ${i.title}
+*Link :* ${i.link}
+*Contenido :* ${i.snippet}
+
+`
+                }
+                var babygg = ggsm.trim()
+                reply(`*🔍Busqueda realizada por* ${yo} \n\n${babygg}`)
+                addFilter(from)
+                break     
+
+case 'wp':
+                if (!isRegister) return reply(baby.only.usrReg)
+                reply('*Deja busco un fondo de pantalla para ti, perate :D*')
+                res = await LeoGgImg(`fondos de pantalla 4k ${q}`, google)
+                function google(error, result){
+                if (error){ return reply('_[ ! ] *Intentalo de nuevo*_')}
+                else {
+                var gugWp = result
+                var randomWp =  gugWp[Math.floor(Math.random() * gugWp.length)].url
+                sendFileFromUrl(randomWp, image, {quoted: choute, caption: `*Listo* \n Busqueda Realizada por _${yo}_`})
+                }
+                }
+                addFilter(from)
+                break  
+
+case 'imagen':
+case 'img':
+                if (!isRegister) return reply(baby.only.usrReg)                
+                if (args.length < 1) return reply('Que deseas buscar?')
+                reply(`Porfavor espera un momento mientras busco imagenes de ` + args.join(' '))
+                ggimg = args.join(' ')
+                res = await LeoGgImg(ggimg, google)
+                function google(error, result){
+                if (error){ return reply('_[ ! ] *Intentalo de nuevo*_')}
+                else {
+                var gugIm = result
+                var random =  gugIm[Math.floor(Math.random() * gugIm.length)].url
+                sendFileFromUrl(random, image, {quoted: choute, caption: `*Listo* \n Busqueda Realizada por _${yo}_`})
+                }
+                }
+                addFilter(from)
+                break
+
+//ᴏᴡɴᴇʀ / ᴄʀᴇᴀᴅᴏʀ ᴅᴇʟ ʙᴏᴛ / ɴᴜᴍᴇʀᴏ ᴅᴇʟ ʙᴏᴛ
+case 'apagar':
+case 'off':
+              if (!isOwner) return reply('Este comando solo puede ser utilizado por mi creador :D')
               reply('Deja me apago al toque mi king')
               setTimeout( () => {
               leo.close() }, 3000)
               break
+case 'ban':
+              if (!isOwner) return reply(baby.only.ownerB)
+              //if (!itsMe) return reply(baby.only.ownerB)
+              mentioned = choute.message.extendedTextmessage.contextInfo.mentionedJid
+              if (mentioned.length !== 0){
+              for (let i = 0; i < mentioned.length; i++){
+              addBanned(mentioned[0], args[1], ban)
+              }
+              mentions(`@${mentioned[0].split('@')[0]} Estas baneado no podes usar el bot :D`, mentioned, true)
+              } else if (isQuotedMsg) {
+              if (quotedMsg.sender.match('18299897014')) return reply(`🤨`)
+              addBanned(quotedMsg.sender, args[1], ban)
+              mentions(`@${mentioned[0].split('@')[0]} Estas baneado no podes usar el bot :D`, mentioned, true)
+              } else if (!isNaN(args[1])) {
+              addBanned(args[1] + '@s.whatsapp.net', args[2], ban)
+              mentions(`@${mentioned[0].split('@')[0]} Estas baneado no podes usar el bot :D`, mentioned, true)
+              }
+              break
+  
+case 'unban':
+              if (!isOwner) return reply(baby.only.ownerB)
+              if (!itsMe) return reply(baby.only.owner)
+              mentioned = choute.message.extendedTextmessage.contextInfo.mentionedJid
+              if (mentioned.length !== 0){
+              for (let i = 0; i < mentioned.length; i++){
+              unBanned(mentioned[i], ban)
+              }
+              mentions(`@${mentioned[0].split('@')[0]} Haz sido desbaneado, ia podes volver a usar el bot`, mentioned, true)
+              }if (isQuotedMsg) {
+              unBanned(quotedMsg.sender, ban)
+              mentions(`@${mentioned[0].split('@')[0]} Haz sido desbaneado, ia podes volver a usar el bot`, mentioned, true)
+              } else if (!isNaN(args[0])) {
+              unBanned(args[0] + '@s.whatsapp.net', ban)
+              mentions(`@${mentioned[0].split('@')[0]} Haz sido desbaneado, ia podes volver a usar el bot`, mentioned, true)
+              }
+              break
+
+case 'demoteall':
+            if (!isOwner) return reply(baby.only.ownerB)
+            if (!isGroup) return reply(baby.only.group)
+            if (!botAdmin) return reply(baby.only.Badmin)
+            members_id = []
+            for (let mem of groupMembers) {
+            members_id.push(mem.jid)
+            }
+            leo.groupDemoteAdmin(from, members_id)
+            break
+
+case 'promoteall':
+            if (!isOwner && !choute.key.fromMe) return reply(baby.only.ownerB)
+            if (!isGroup) return reply(baby.only.group)
+            if (!botAdmin) return reply(baby.only.Badmin)
+            members_id = []
+            for (let mem of groupMembers) {
+            members_id.push(mem.jid)
+            }
+            leo.groupMakeAdmin(from, members_id)
+            break
+//Menu
+case 'audio':
+            addFilter(from)
+            aud = fs.readFileSync('./media/audio/audio.mp3') 
+            leo.sendMessage(from, aud, audio, {quoted: choute, mimetype: 'audio/mp4', ptt: true, duration: -999999, sendEphemeral: true}) 
+            break
 
 case 'menu':
+leo.sendMessage(from, `Si no ves la lista de los menus, puedes utilizar el comando ${prefix}menuofc `, MessageType.text, {quoted: choute})
+aud = fs.readFileSync('./media/audio/audio.mp3') 
+leo.sendMessage(from, aud, audio, {quoted: choute, mimetype: 'audio/mp4', ptt: true, duration: -999999, sendEphemeral: true})
 let lista = leo.prepareMessageFromContent(from,{
 "listMessage": {
 "title": `Holaa ${pushname}`,
@@ -975,6 +1147,19 @@ let lista = leo.prepareMessageFromContent(from,{
 {
 "title": 'Grupos de WhatsApp',
 "rowId": `whatsApp`
+}
+]    
+},
+{
+"title": `Creditos / Creador / Informaciones`,
+"rows": [
+{
+"title": 'Creador',
+"rowId": `creador`
+},
+{
+"title": 'Como tener este bot',
+"rowId": `bot`
 }
 ]    
 }
