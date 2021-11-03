@@ -7,7 +7,9 @@
 </p>
 REDES SOCIALES
 </p>
+El bot aun no esta finalizado.
 Si necesita mas informacion o el bot le presenta algun problema, recuerda notificarmero a por mis redes.
+
 </p>
 <a href="https://www.youtube.com/channel/UC-HPutaDGeTPjrCId0bXQgg"><img src="/media/redes/youtube.png" width="40" height="40"</a>
 <br>
