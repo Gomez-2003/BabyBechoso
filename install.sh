@@ -22,3 +22,4 @@ npm i spinnies
 npm i image-to-base64
 npm i remove.bg
 npm i fluent-ffmpeg
+npm i yt-search
